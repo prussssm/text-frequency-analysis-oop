@@ -11,10 +11,15 @@ class TextAnalyzer:
         if choice == '1':
             self.text = input("Введите текст: ")
         elif choice == '2':
-            length = int(input("Введите длину случайного текста: "))
-            self.text = ''.join(random.choices(string.ascii_letters + string.punctuation + ' ', k=length))
+            try:
+                length = int(input("Введите длину случайного текста: "))
+                self.text = ''.join(random.choices(string.ascii_letters + string.punctuation + ' ', k=length))
+            except ValueError:
+                print("Ошибка: введите корректное числовое значение для длины.")
         else:
             print("Неверный выбор!")
+        
+        self.validate_input()
 
     def execute_algorithm(self):
         if not self.text:
@@ -38,7 +43,9 @@ class TextAnalyzer:
             print(f"'{char}': {freq:.4f}")
 
     def validate_input(self):
-        pass
+        if not self.text:
+            print("Ошибка: текст не может быть пустым.")
+            self.text = ""
 
 class Menu:
     def __init__(self, analyzer):
@@ -66,16 +73,15 @@ class Menu:
         return True
 
     def run(self):
-        pass
+        while True:
+            self.display()
+            if not self.handle_choice():
+                break
 
 def main():
     analyzer = TextAnalyzer()
     menu = Menu(analyzer)
-    
-    while True:
-        menu.display()
-        if not menu.handle_choice():
-            break
+    menu.run()
 
 if __name__ == "__main__":
     main()
